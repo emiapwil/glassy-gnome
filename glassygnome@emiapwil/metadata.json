@@ -1,0 +1,6 @@
+{
+	"shell-version": ["3.14.4"],
+	"uuid": "glassygnome@emiapwil",
+	"name": "Glassy GNOME",
+	"description": "A tool to change the transparency of windows in GNOME 3"
+}
