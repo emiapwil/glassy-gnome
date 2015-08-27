@@ -30,8 +30,8 @@ Edit the `glassygnome/config.json` like in the
 ~~~
 
 To configure the behaviour of the transparency, first you should define a list
-of patterns and the expected opacity that will be set for those which match the
-patterns.
+of patterns and the expected opacity (in percentage) that will be set for those
+which match the patterns.
 
 # Features in the Future
 
