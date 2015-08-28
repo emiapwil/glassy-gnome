@@ -54,3 +54,10 @@ gnome-shell-extension-tool -e glassygnome@emiapwil
 # Disable glassy-gnome globally
 gnome-shell-extension-tool -d glassygnome@emiapwil
 ~~~
+
+# References
+
+[This post][schema usage] is an excellent guide to how to use schemas to store
+the configurations.
+
+[schema usage]: http://www.mibus.org/2013/02/15/making-gnome-shell-plugins-save-their-config/
