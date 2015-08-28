@@ -115,16 +115,11 @@ function reload_filters() {
 
 function get_active_window() {
     let active_workspace_index = global.screen.get_active_workspace_index();
-	glassy_log("active_workspace_index: " + active_workspace_index);
     let active_windows = global.get_window_actors().filter(function(win) {
         let meta_win = win.get_meta_window();
 		let workspace_index = meta_win.get_workspace().index();
-		glassy_log("name: " + meta_win.get_wm_class());
-		glassy_log("focused: " + meta_win.has_focus());
-		glassy_log("workspace: " + workspace_index);
         return meta_win.has_focus() && (workspace_index == active_workspace_index);
     });
-	glassy_log(active_windows);
     return (active_windows.length > 0 ? active_windows[0] : null);
 }
 
@@ -150,7 +145,6 @@ function toggle_glassy_window() {
 
 function increase_window_opacity() {
     let win = get_active_window();
-	glassy_log(win.get_meta_window().get_wm_class());
     if (win != null) {
         let meta_win = win.get_meta_window();
 

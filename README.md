@@ -7,53 +7,56 @@ A gnome-shell extension to enable window transparency.
 Put `glassygnome@emiapwil` to the extension folder (Mine is
 `~/.local/share/gnome-shell/extensions`).
 
-Put `glassygnome` into the *user's data directory* (Mine is `~/.local/share`).
+## Window Filters
 
-Edit the `glassygnome/config.json` like in the
-[example](glassygnome/config.json):
+The window filters are tuples in the following format: `(patterns,
+active_opacity, inactive_opacity, step)`.
 
+There are two default filters that come with the extension: one is matched
+against `Terminal` and the other is wildcard `.*`.
+
+Since there is no GUI to manage the filters at the moment, people can use
+`gsettings` to modify them.  For example, the following code inserts a new rule
+for *Firefox*:
+
+~~~{.bash}
+gsettings --schemadir ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil/schemas \
+          set org.gnome.shell.extensions.glassy-gnome filters \
+	      "[
+              (['Terminal'], byte 0x50, byte 0x32, byte 0x0a),
+	          (['Firefox'], byte 0x5f, byte 0x50, byte 0x0a),
+	          (['.*'], byte 0x5f, byte 0x50, byte 0x05)
+          ]"
 ~~~
-{
-	"filters": [
-		{
-			"patterns": ["Terminal"],
-			"active_opacity": 80,
-			"inactive_opacity": 50,
-		},
-		{
-			"patterns": [".*"],
-			"active_opacity": 95,
-			"inactive_opacity": 80,
-		}
-	]
-}
-~~~
 
-To configure the behaviour of the transparency, first you should define a list
-of patterns and the expected opacity (in percentage) that will be set for those
-which match the patterns.
+If you are not certain what the regex should look like, it is possible to use
+`xwininfo` to see all names of the windows.  Or you can use the [*looking glass
+tool*](looking-glass), which is quite useful.
+
+[looking-glass]: https://wiki.gnome.org/Projects/GnomeShell/LookingGlass
+
+## Shortcuts to manipulate the opacity of the active window
+
+Currently I use `<Super>0`/`<Super>9`/`<Super>8` to increase/decrease/reset the
+opacity of the active window.
+
+It *SHOULD* be possible to use `gsettings` to modify the shortcuts too but I
+haven't tested this.
+
+It is worth pointing out that the changes will not be recorded after the window
+is closed.  I might consider adding this as a future feature.
+
+## Auto start
+
+The default value of `auto-start` is `true`.  It *SHOULD* be possible to change
+the value to `false` but again I haven't tested it yet.
 
 # Features in the Future
 
-- A GUI for settings and use the settings schema instead of a configuration file
-- Dynamic/Customized opacity
+- A GUI for settings
+- (DONE) Use the settings schema instead of a configuration file
 - Shortcut bindings
-
-# Workarounds
-
-The configuration file is read every time the extension updates the opacity, so
-it is possible to use a JSON program to modify the values dynamically.
-
-Also shortcuts to enable/disable the extension can be implemented with a simple
-script:
-
-~~~
-# Enable glassy-gnome globally
-gnome-shell-extension-tool -e glassygnome@emiapwil
-
-# Disable glassy-gnome globally
-gnome-shell-extension-tool -d glassygnome@emiapwil
-~~~
+- (DONE) Dynamic/Customized opacity
 
 # References
 
