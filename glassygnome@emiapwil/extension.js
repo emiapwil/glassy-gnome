@@ -73,8 +73,6 @@ function update_opacity(win, opacity) {
     }
     let new_glassy = 'glassy' + Math.floor(opacity / 26);
     indicator.actor.style_class = old_style + " " + new_glassy;
-
-    glassy_log(indicator.toSource());
 }
 
 function glassify() {
