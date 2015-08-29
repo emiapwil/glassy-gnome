@@ -5,6 +5,5 @@
     "original-authors": [ "emiapwil@gmail.com" ],
 	"description": "A tool to change the transparency of windows in GNOME 3",
     "settings-schema": "org.gnome.shell.extensions.glassy-gnome",
-    "url": "https://github.com/emiapwil/glassy-gnome",
-    "version": 2
+    "url": "https://github.com/emiapwil/glassy-gnome"
 }

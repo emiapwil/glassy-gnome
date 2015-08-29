@@ -1,9 +1,44 @@
 
-.helloworld-label {
-    font-size: 36px;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: rgba(10,10,10,0.7);
-    border-radius: 5px;
-    padding: .5em;
+.glassy0 * {
+    color: rgba(255,255,255,0.1);
+}
+
+.glassy1 * {
+    color: rgba(255,255,255,0.1);
+}
+
+.glassy2 * {
+    color: rgba(255,255,255,0.15);
+}
+
+.glassy3 * {
+    color: rgba(255,255,255,0.2);
+}
+
+.glassy4 * {
+    color: rgba(255,255,255,0.3);
+}
+
+.glassy5 * {
+    color: rgba(255,255,255,0.4);
+}
+
+.glassy6 * {
+    color: rgba(255,255,255,0.5);
+}
+
+.glassy7 * {
+    color: rgba(255,255,255,0.65);
+}
+
+.glassy8 * {
+    color: rgba(255,255,255,0.8);
+}
+
+.glassy9 * {
+    color: rgba(255,255,255,1.0);
+}
+
+.glassy10 * {
+    color: rgba(255,255,255,1.0);
 }
