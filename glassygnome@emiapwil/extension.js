@@ -31,6 +31,20 @@ function glassy_log(text) {
     global.log('[glassy-gnome]: ' + text);
 }
 
+function is_active_window(win) {
+    let active_workspace_index = global.screen.get_active_workspace_index();
+    let meta_win = win.get_meta_window();
+    let workspace_index = meta_win.get_workspace().index();
+    return meta_win.has_focus() && (workspace_index == active_workspace_index);
+}
+
+function get_active_window() {
+    let active_windows = global.get_window_actors().filter(function(win) {
+        return is_active_window(win);
+    });
+    return (active_windows.length > 0 ? active_windows[0] : null);
+}
+
 function configure_glassy_window(meta_win) {
     if (meta_win.glassy == null) {
         meta_win.glassy = {
@@ -66,13 +80,11 @@ function reconfigure_windows() {
 function update_opacity(win, opacity) {
     win.set_opacity(opacity);
 
-    let old_style = indicator.actor.style_class;
-    let old_glassy = old_style.match('\\s*glassy\\d+\\s*');
-    if (old_glassy) {
-        old_style = old_style.replace(old_glassy, ' ');
+    if (!is_active_window(win)) {
+        return;
     }
-    let new_glassy = 'glassy' + Math.floor(opacity / 26);
-    indicator.actor.style_class = old_style + " " + new_glassy;
+
+    indicator.actor.set_opacity(opacity);
 }
 
 function glassify() {
@@ -129,20 +141,6 @@ function reload_filters() {
         };
         filters.push(filter);
     }
-}
-
-function is_active_window(win) {
-    let active_workspace_index = global.screen.get_active_workspace_index();
-    let meta_win = win.get_meta_window();
-    let workspace_index = meta_win.get_workspace().index();
-    return meta_win.has_focus() && (workspace_index == active_workspace_index);
-}
-
-function get_active_window() {
-    let active_windows = global.get_window_actors().filter(function(win) {
-        return is_active_window(win);
-    });
-    return (active_windows.length > 0 ? active_windows[0] : null);
 }
 
 function toggle_glassy_global() {
