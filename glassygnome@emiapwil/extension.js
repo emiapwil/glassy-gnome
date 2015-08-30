@@ -285,7 +285,11 @@ function disconnect_signals() {
 }
 
 function create_label() {
-    let label = new St.Label({ text: 'G', y_align: Clutter.ActorAlign.CENTER });
+    let label = new St.Label({
+        text: 'G',
+        style_class: "glassygnome-indicator",
+        y_align: Clutter.ActorAlign.CENTER
+    });
     indicator = new PanelMenu.Button();
     indicator.actor.add_actor(label);
 
