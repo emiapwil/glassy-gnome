@@ -2,13 +2,12 @@
 const Main           = imports.ui.main;
 const Shell          = imports.gi.Shell;
 const ExtensionUtils = imports.misc.extensionUtils;
-const Me             = ExtensionUtils.getCurrentExtension();
-const Convenience    = Me.imports.convenience;
+const Glassy         = ExtensionUtils.getCurrentExtension();
+const Convenience    = Glassy.imports.convenience;
+const Indicator      = Glassy.imports.indicator;
+//TODO const Preference     = Glassy.imports.preference;
 const GLib           = imports.gi.GLib;
 const Meta           = imports.gi.Meta;
-const St             = imports.gi.St;
-const Clutter        = imports.gi.Clutter;
-const PanelMenu      = imports.ui.panelMenu;
 
 const OPAQUE      = 255;
 const TRANSPARENT = 0;
@@ -25,7 +24,7 @@ var on_window_created, on_restacked;
 
 var setting_signals;
 
-var indicator;
+var indicator = Indicator.Indicator();
 
 function glassy_log(text) {
     global.log('[glassy-gnome]: ' + text);
@@ -84,7 +83,7 @@ function update_opacity(win, opacity) {
         return;
     }
 
-    indicator.actor.set_opacity(opacity);
+    indicator.set_opacity(opacity);
 }
 
 function glassify() {
@@ -137,7 +136,7 @@ function reload_filters() {
             patterns:           _patterns,
             active_opacity:     regulate(_active_opacity),
             inactive_opacity:   regulate(_inactive_opacity),
-            step:                   regulate(_step)
+            step:               regulate(_step)
         };
         filters.push(filter);
     }
@@ -248,6 +247,8 @@ function unbind_shortcuts() {
 function init() {
     settings = null;
 
+    indicator.init();
+
     glassy_log("initialized");
 }
 
@@ -285,19 +286,11 @@ function disconnect_signals() {
 }
 
 function create_label() {
-    let label = new St.Label({
-        text: 'G',
-        style_class: "glassygnome-indicator",
-        y_align: Clutter.ActorAlign.CENTER
-    });
-    indicator = new PanelMenu.Button();
-    indicator.actor.add_actor(label);
-
-    Main.panel.addToStatusArea('glassygnome_indicator', indicator);
+    indicator.enable();
 }
 
 function destroy_label() {
-    indicator.destroy();
+    indicator.disable();
 }
 
 function enable() {
