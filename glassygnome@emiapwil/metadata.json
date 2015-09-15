@@ -1,9 +1,9 @@
 {
-	"shell-version": ["3.14"],
-	"uuid": "glassygnome@emiapwil",
-	"name": "Glassy GNOME",
+    "shell-version": ["3.14", "3.16"],
+    "uuid": "glassygnome@emiapwil",
+    "name": "Glassy GNOME",
     "original-authors": [ "emiapwil@gmail.com" ],
-	"description": "A tool to change the transparency of windows in GNOME 3",
+    "description": "A tool to change the transparency of windows in GNOME 3",
     "settings-schema": "org.gnome.shell.extensions.glassy-gnome",
     "url": "https://github.com/emiapwil/glassy-gnome"
 }
