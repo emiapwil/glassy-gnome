@@ -33,6 +33,9 @@ If you are not certain what the regex should look like, it is possible to use
 `xwininfo` to see all names of the windows.  Or you can use the [*looking glass
 tool*](looking-glass), which is quite useful.
 
+The valid range of `active_opacity`/`inactive_opacity`/`step` are 0~100 (0x00~0x64).
+If a given value is larger than 100, it will be treated as 100.
+
 [looking-glass]: https://wiki.gnome.org/Projects/GnomeShell/LookingGlass
 
 ## Shortcuts to manipulate the opacity of the active window
@@ -57,17 +60,30 @@ An indicator is put in the status bar with a single letter "G" and the style
 class "glassygnome-indicator".  The opacity of the letter is identical to the
 opacity of the active window.
 
-### Bug
+## Known Bugs
+
+### Indicator not functioning properly
 
 If a window is sticked to the top (by enabling "always on top"), the opacity
 of the indicator will not change when switching from this window and another
 normal window in the same workspace.
 
+### Extra key strokes on fully opaque/transparent windows
+
+> If I hit Super+0 for a fully opaque window, say, three times, I need to hit
+> Super+9 four times until the window starts becoming transparent.
+
+See [Issue 1][issue-1].
+
+Thanks [@krlmlr](https://github.com/krlmlr) for pointing out the bug.
+
+[issue-1]: https://github.com/emiapwil/glassy-gnome/issues/1
+
 # Features in the Future
 
 - A GUI for settings
 - (DONE) Use the settings schema instead of a configuration file
-- Shortcut bindings
+- (DONE) Shortcut bindings
 - (DONE) Dynamic/Customized opacity
 
 # References

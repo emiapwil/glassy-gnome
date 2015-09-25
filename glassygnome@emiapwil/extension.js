@@ -162,6 +162,14 @@ function toggle_glassy_window() {
     glassify();
 }
 
+function test_opacity_overflow(opacity) {
+    return (opacity >= 100);
+}
+
+function test_opacity_underflow(opacity) {
+    return (opacity <= 0);
+}
+
 function increase_window_opacity() {
     let win = get_active_window();
     if (win != null) {
@@ -172,7 +180,9 @@ function increase_window_opacity() {
         let glassy = meta_win.glassy;
 
         if (activated && glassy.enabled && glassy.filter) {
-            glassy.offset += glassy.filter.step;
+            if (!test_opacity_overflow(glassy.offset + glassy.filter.active_opacity)) {
+                glassy.offset += glassy.filter.step;
+            }
         }
     }
 
@@ -189,7 +199,9 @@ function decrease_window_opacity() {
         let glassy = meta_win.glassy;
 
         if (activated && glassy.enabled && glassy.filter) {
-            glassy.offset -= glassy.filter.step;
+            if (!test_opacity_underflow(glassy.offset + glassy.filter.active_opacity)) {
+                glassy.offset -= glassy.filter.step;
+            }
         }
     }
 
