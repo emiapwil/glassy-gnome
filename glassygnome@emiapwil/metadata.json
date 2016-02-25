@@ -1,5 +1,5 @@
 {
-    "shell-version": ["3.16"],
+    "shell-version": ["3.18", "3.16"],
     "uuid": "glassygnome@emiapwil",
     "name": "Glassy GNOME",
     "original-authors": [ "emiapwil@gmail.com" ],
