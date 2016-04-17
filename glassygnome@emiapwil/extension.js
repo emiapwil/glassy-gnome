@@ -20,7 +20,7 @@ const reset_key         = 'reset-opacity-key';
 
 var settings, filters, activated;
 
-var on_window_created, on_restacked;
+var on_window_created, on_restacked, on_focused;
 
 var setting_signals;
 
@@ -311,6 +311,7 @@ function enable() {
 
     on_window_created = global.display.connect('window-created', glassify);
     on_restacked = global.screen.connect('restacked', glassify);
+    on_focused = global.display.connect('notify::focus-window', glassify);
 
     connect_signals();
     create_label();

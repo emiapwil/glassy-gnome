@@ -62,12 +62,6 @@ opacity of the active window.
 
 ## Known Bugs
 
-### Indicator not functioning properly
-
-If a window is sticked to the top (by enabling "always on top"), the opacity
-of the indicator will not change when switching from this window and another
-normal window in the same workspace.
-
 ### Extra key strokes on fully opaque/transparent windows
 
 > If I hit Super+0 for a fully opaque window, say, three times, I need to hit
@@ -78,6 +72,18 @@ See [Issue 1][issue-1].
 Thanks [@krlmlr](https://github.com/krlmlr) for pointing out the bug.
 
 [issue-1]: https://github.com/emiapwil/glassy-gnome/issues/1
+
+### Not functioning properly with *always-on-top* windows
+
+If a window is sticked to the top (by enabling "always on top"), the opacity of
+the normal windows in the same workspace will not change when they loss/obtain
+the focus.
+
+See [Issue 2][issue-2].
+
+Thanks [@ipaq3870](https://github.com/ipaq3870) for providing the solution.
+
+[issue-2]: https://github.com/emiapwil/glassy-gnome/issues/2
 
 # Features in the Future
 
