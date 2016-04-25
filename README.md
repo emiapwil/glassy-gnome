@@ -43,8 +43,19 @@ If a given value is larger than 100, it will be treated as 100.
 Currently I use `<Super>0`/`<Super>9`/`<Super>8` to increase/decrease/reset the
 opacity of the active window.
 
-It *SHOULD* be possible to use `gsettings` to modify the shortcuts too but I
-haven't tested this.
+There are five shortcuts available for glassy-gnome.  Except the three mentioned
+above, you can also toggle both the global and per-window glassy effect.  The
+key bindings for these two shortcuts, however, are not set when you first
+install the extension.  You can use the following command to set up the
+shortcuts:
+
+~~~{.bash}
+gsettings --schemadir ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil/schemas \
+          set org.gnome.shell.extensions.glassy-gnome toggle-glassy-global-key "['<Super>6']"
+
+gsettings --schemadir ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil/schemas \
+          set org.gnome.shell.extensions.glassy-gnome toggle-glassy-window-key "['<Super>7']"
+~~~
 
 It is worth pointing out that the changes will not be recorded after the window
 is closed.  I might consider adding this as a future feature.
