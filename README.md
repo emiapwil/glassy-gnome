@@ -4,8 +4,24 @@ A gnome-shell extension to enable window transparency.
 
 # Usage
 
+## Copy the extension to the extension folder manually
+
 Put `glassygnome@emiapwil` to the extension folder (Mine is
 `~/.local/share/gnome-shell/extensions`).
+
+## Build from source
+
+Clone this repository and run `make`.
+
+The extension will be compiled and put to folder
+`~/.local/share/gnome-shell/extensions`.  You might have to replace the
+`EXTENSION_DIR` with the path to the GNOME extensions on your own system.
+
+## Download from extensions.gnome.org
+
+The extension has been uploaded to
+[extensions.gnome.org](https://extensions.gnome.org/extension/982/glassy-gnome/).
+You can download the extension there.
 
 ## Window Filters
 
@@ -57,6 +73,10 @@ gsettings --schemadir ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil
           set org.gnome.shell.extensions.glassy-gnome toggle-glassy-window-key "['<Super>7']"
 ~~~
 
+You can also replace `toggle-glassy-global-key` to
+`inc-opacity-key`/`dec-opacity-key`/`reset-opacity-key` to set up your own key
+bindings for increasing/decreasing/resetting the opacity for the active window.
+
 It is worth pointing out that the changes will not be recorded after the window
 is closed.  I might consider adding this as a future feature.
 
@@ -99,6 +119,7 @@ Thanks [@ipaq3870](https://github.com/ipaq3870) for providing the solution.
 # Features in the Future
 
 - A GUI for settings
+- A CLI tool for settings
 - (DONE) Use the settings schema instead of a configuration file
 - (DONE) Shortcut bindings
 - (DONE) Dynamic/Customized opacity
