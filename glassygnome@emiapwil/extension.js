@@ -1,16 +1,16 @@
 
-const Main           = imports.ui.main;
-const Shell          = imports.gi.Shell;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Glassy         = ExtensionUtils.getCurrentExtension();
-const Convenience    = Glassy.imports.convenience;
-const Indicator      = Glassy.imports.indicator;
+const Main              = imports.ui.main;
+const Shell             = imports.gi.Shell;
+const ExtensionUtils    = imports.misc.extensionUtils;
+const Glassy            = ExtensionUtils.getCurrentExtension();
+const Convenience       = Glassy.imports.convenience;
+const Indicator         = Glassy.imports.indicator;
 //TODO const Preference     = Glassy.imports.preference;
-const GLib           = imports.gi.GLib;
-const Meta           = imports.gi.Meta;
+const GLib              = imports.gi.GLib;
+const Meta              = imports.gi.Meta;
 
-const OPAQUE      = 255;
-const TRANSPARENT = 0;
+const OPAQUE            = 255;
+const TRANSPARENT       = 0;
 
 const toggle_key        = 'toggle-glassy-global-key';
 const toggle_window_key = 'toggle-glassy-window-key';
@@ -44,6 +44,19 @@ function get_active_window() {
     return (active_windows.length > 0 ? active_windows[0] : null);
 }
 
+function find_filter(window_class) {
+    for (let i in filters) {
+        let filter = filters[i];
+        for (let j in filter.patterns) {
+            let pattern = filter.patterns[j];
+            if (window_class.match('^' + pattern + '$')) {
+                return filter;
+            }
+        }
+    }
+    return null;
+}
+
 function configure_glassy_window(meta_win) {
     if (meta_win.glassy == null) {
         meta_win.glassy = {
@@ -52,16 +65,9 @@ function configure_glassy_window(meta_win) {
             offset:     0
         };
     }
-    for (let i in filters) {
-        let filter = filters[i];
-        for (let j in filter.patterns) {
-            let pattern = filter.patterns[j];
-            if (meta_win.get_wm_class().match('^' + pattern + '$')) {
-                meta_win.glassy.filter = filter;
-                return;
-            }
-        }
-    }
+    let window_class = meta_win.get_wm_class() || "";
+
+    meta_win.glassy.filter = find_filter(window_class);
 }
 
 function test_glassy_window(meta_win) {
@@ -92,6 +98,7 @@ function glassify() {
             update_opacity(win, OPAQUE);
             return;
         }
+
         let meta_win = win.get_meta_window();
 
         test_glassy_window(meta_win);
@@ -307,7 +314,7 @@ function destroy_label() {
 
 function enable() {
     update_settings();
-    activated = settings.get_boolean('auto-start');
+    activated = settings.get_boolean('auto-start') || true;
 
     on_window_created = global.display.connect('window-created', glassify);
     on_restacked = global.screen.connect('restacked', glassify);
