@@ -50,5 +50,10 @@
             <default>true</default>
             <summary>Start Glassy GNOME when the system starts up.</summary>
         </key>
+
+        <key name="hide-indicator" type="b">
+            <default>false</default>
+            <summary>Hide the indicator.</summary>
+        </key>
     </schema>
 </schemalist>

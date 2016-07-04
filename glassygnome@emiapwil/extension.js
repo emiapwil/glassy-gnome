@@ -17,12 +17,11 @@ const toggle_window_key = 'toggle-glassy-window-key';
 const inc_key           = 'inc-opacity-key';
 const dec_key           = 'dec-opacity-key';
 const reset_key         = 'reset-opacity-key';
+const hide_indicator    = 'hide-indicator';
 
 var settings, filters, activated;
 
-var on_window_created, on_restacked, on_focused;
-
-var setting_signals;
+var signals;
 
 var indicator = Indicator.Indicator();
 
@@ -266,8 +265,6 @@ function unbind_shortcuts() {
 function init() {
     settings = null;
 
-    indicator.init();
-
     glassy_log("initialized");
 }
 
@@ -284,43 +281,69 @@ function update_settings() {
     bind_shortcuts();
 }
 
-function connect_signals() {
-    setting_signals = [];
-
-    setting_signals.push(settings.connect('changed::filters', update_settings));
-    setting_signals.push(settings.connect('changed::' + toggle_key, update_settings));
-    setting_signals.push(settings.connect('changed::' + toggle_window_key, update_settings));
-    setting_signals.push(settings.connect('changed::' + inc_key, update_settings));
-    setting_signals.push(settings.connect('changed::' + dec_key, update_settings));
-    setting_signals.push(settings.connect('changed::' + reset_key, update_settings));
+function connect_signal(obj, signal, handler) {
+    var _signal = obj.connect(signal, handler);
+    if (_signal) {
+        signals.push([obj, _signal]);
+    }
 }
 
 function disconnect_signals() {
-    setting_signals.forEach(function (signal) {
-        if (signal) {
-            settings.disconnect(signal);
+    signals.forEach(function (signal) {
+        var obj = signal[0], sig = signal[1];
+        if (sig) {
+            obj.disconnect(sig);
         }
     });
-    setting_signals = []
+    signals = []
 }
 
 function create_label() {
-    indicator.enable();
+    var hidden = settings.get_boolean(hide_indicator) || false;
+    if (!hidden) {
+        indicator.init();
+        indicator.enable();
+    }
 }
 
 function destroy_label() {
     indicator.disable();
+    indicator.destroy();
+}
+
+function update_label() {
+    var hidden = settings.get_boolean(hide_indicator) || false;
+    if (!hidden) {
+        create_label();
+    } else {
+        destroy_label();
+    }
+}
+
+function asynchronous_glassify() {
+    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 300, glassify, null);
 }
 
 function enable() {
     update_settings();
     activated = settings.get_boolean('auto-start') || true;
 
-    on_window_created = global.display.connect('window-created', glassify);
-    on_restacked = global.screen.connect('restacked', glassify);
-    on_focused = global.display.connect('notify::focus-window', glassify);
+    signals = [];
 
-    connect_signals();
+    // signals for window events
+    connect_signal(global.display, 'window-created', asynchronous_glassify);
+    connect_signal(global.screen, 'restacked', glassify);
+    connect_signal(global.display, 'notify::focus-window', glassify);
+
+    // signals for settings
+    connect_signal(settings, 'changed::filters', update_settings);
+    connect_signal(settings, 'changed::' + toggle_key, update_settings);
+    connect_signal(settings, 'changed::' + toggle_window_key, update_settings);
+    connect_signal(settings, 'changed::' + inc_key, update_settings);
+    connect_signal(settings, 'changed::' + dec_key, update_settings);
+    connect_signal(settings, 'changed::' + reset_key, update_settings);
+    connect_signal(settings, 'changed::' + hide_indicator, update_label);
+
     create_label();
 
     glassify();
@@ -333,9 +356,6 @@ function disable() {
 
     destroy_label();
     disconnect_signals();
-
-    global.display.disconnect(on_window_created);
-    global.screen.disconnect(on_restacked);
 
     glassify();
 
