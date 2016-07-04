@@ -91,6 +91,25 @@ An indicator is put in the status bar with a single letter "G" and the style
 class "glassygnome-indicator".  The opacity of the letter is identical to the
 opacity of the active window.
 
+### Toggle the Indicator
+
+This feature is included since version 11 and is tested on GNOME 3.18.
+
+People may find the indicator useless and want to disable it.  You can do so by
+typing the following command:
+
+~~~
+gsettings --schemadir ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil/schemas \
+          set org.gnome.shell.extensions.glassy-gnome hide-indicator true
+~~~
+
+You can also re-enable the indicator:
+
+~~~
+gsettings --schemadir ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil/schemas \
+          set org.gnome.shell.extensions.glassy-gnome hide-indicator false
+~~~
+
 ## Known Bugs
 
 ### Extra key strokes on fully opaque/transparent windows
@@ -115,6 +134,16 @@ See [Issue 2][issue-2].
 Thanks [@ipaq3870](https://github.com/ipaq3870) for providing the solution.
 
 [issue-2]: https://github.com/emiapwil/glassy-gnome/issues/2
+
+### The opacity for new window is not correct
+
+The opacity of a new window is always 255 (fully opaque).  It is (probably)
+caused because glassy sets the opacity before the window is prepared to respond
+to events.
+
+See [Issue 6][issue-6].
+
+[issue-6]: https://github.com/emiapwil/glassy-gnome/issues/6
 
 # Features in the Future
 
