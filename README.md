@@ -135,6 +135,36 @@ Thanks [@ipaq3870](https://github.com/ipaq3870) for providing the solution.
 
 [issue-2]: https://github.com/emiapwil/glassy-gnome/issues/2
 
+### Increase the opacity for special windows
+
+Some special windows require more opacity, for example, the menus and tool bars
+for the browser.  An option named the `mix-ratio` is introduced which will be
+used to compute the "mixed" opacity for certain windows.  See [Issue 4][issue 4]
+for details.  The option is a byte, ranging from 0 to 255.
+
+The opacity is computed as (slightly different from the implementation but
+should be enough to demonstrate how it works):
+
+~~~
+ratio = mix_ratio * 100 / 256
+new_opacity = (original_opacity * (100 - ratio) + OPAQUE * ratio) / 100
+~~~
+
+Generally speaking, the opacity increases as the `mix-ratio` grows. A
+`mix-ratio` of 255 means the window will be completely opaque.  The default
+value is 0 because of my personal favor, you can use the following command to
+set the `mix-ratio`:
+
+~~~
+gsettings --schemadir ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil/schemas \
+          set org.gnome.shell.extensions.glassy-gnome mix-ratio 128
+~~~
+
+Thanks [@ipaq3870](https://github.com/ipaq3870) for pointing out the bug and
+providing the basic solution.
+
+[issue-4]: https://github.com/emiapwil/glassy-gnome/issues/4
+
 ### The opacity for new window is not correct
 
 The opacity of a new window is always 255 (fully opaque).  It is (probably)

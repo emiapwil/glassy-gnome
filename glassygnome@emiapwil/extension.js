@@ -12,18 +12,52 @@ const Meta              = imports.gi.Meta;
 const OPAQUE            = 255;
 const TRANSPARENT       = 0;
 
-const toggle_key        = 'toggle-glassy-global-key';
-const toggle_window_key = 'toggle-glassy-window-key';
-const inc_key           = 'inc-opacity-key';
-const dec_key           = 'dec-opacity-key';
-const reset_key         = 'reset-opacity-key';
-const hide_indicator    = 'hide-indicator';
+// setting key names
+const AUTO_START        = 'auto-start';
+const FILTERS           = 'filters';
+const TOGGLE_KEY        = 'toggle-glassy-global-key';
+const TOGGLE_WINDOW_KEY = 'toggle-glassy-window-key';
+const INC_KEY           = 'inc-opacity-key';
+const DEC_KEY           = 'dec-opacity-key';
+const RESET_KEY         = 'reset-opacity-key';
+const HIDE_INDICATOR    = 'hide-indicator';
+const MIX_RATIO         = 'mix-ratio';
+
+const window_type_map   = {
+    0   :   'NORMAL',           // Meta.WindowType.NORMAL
+    1   :   'DESKTOP',          // Meta.WindowType.DESKTOP
+    2   :   'DOCK',             // Meta.WindowType.DOCK
+    3   :   'DIALOG',           // Meta.WindowType.DIALOG
+    4   :   'MODAL_DIALOG',     // Meta.WindowType.MODAL_DIALOG
+    5   :   'TOOLBAR',          // Meta.WindowType.TOOLBAR
+    6   :   'MENU',             // Meta.WindowType.MENU
+    7   :   'UTILITY',          // Meta.WindowType.UTILITY
+    8   :   'SPLASHSCREEN',     // Meta.WindowType.SPLASHSCREEN
+    9   :   'DROPDOWN_MENU',    // Meta.WindowType.DROPDOWN_MENU
+    10  :   'POPUP_MENU',       // Meta.WindowType.POPUP_MENU
+    11  :   'TOOLTIP',          // Meta.WindowType.TOOLTIP
+    12  :   'NOTIFICATION',     // Meta.WindowType.NOTIFICATION
+    13  :   'COMBO',            // Meta.WindowType.COMBO
+    14  :   'DND',              // Meta.WindowType.DND
+    15  :   'OVERRIDE_OTHER'    // Meta.WindowType.OVERRIDE_OTHER
+};
+
+const window_type_to_be_mixed = [
+    Meta.WindowType.SPLASHSCREEN,
+    Meta.WindowType.DROPDOWN_MENU,
+    Meta.WindowType.POPUP_MENU,
+    Meta.WindowType.TOOLTIP,
+    Meta.WindowType.OVERRIDE_OTHER
+];
 
 var settings, filters, activated;
 
 var signals;
 
 var indicator = Indicator.Indicator();
+
+const MAX_MIX_RATIO = 256;
+var mix_ratio;
 
 function glassy_log(text) {
     global.log('[glassy-gnome]: ' + text);
@@ -91,6 +125,15 @@ function update_opacity(win, opacity) {
     indicator.set_opacity(opacity);
 }
 
+function regulate(opacity_percentage, win_type) {
+    win_type = win_type || Meta.WindowType.NORMAL;
+    if (window_type_to_be_mixed.indexOf(win_type) != -1) {
+        let mixed = opacity_percentage * (MAX_MIX_RATIO - mix_ratio) + 100 * mix_ratio;
+        opacity_percentage = mixed / MAX_MIX_RATIO;
+    }
+    return Math.max(0, Math.min(100, opacity_percentage));
+}
+
 function glassify() {
     global.get_window_actors().forEach(function(win) {
         if (!activated) {
@@ -105,6 +148,7 @@ function glassify() {
         let glassy = meta_win.glassy;
         let win_name = meta_win.get_wm_class();
         let is_active = meta_win.has_focus();
+        let win_type = meta_win.get_window_type() || Meta.WindowType.NORMAL;
 
         if ((glassy.filter == null) || (!glassy.enabled)) {
             update_opacity(win, OPAQUE);
@@ -115,19 +159,15 @@ function glassify() {
         let opacity_percentage = (is_active ? filter.active_opacity
                                             : filter.inactive_opacity);
         opacity_percentage += glassy.offset;
-        opacity_percentage = regulate(opacity_percentage);
+        opacity_percentage = regulate(opacity_percentage, win_type);
 
         let opacity = Math.floor(opacity_percentage * OPAQUE / 100);
         update_opacity(win, opacity);
     });
 }
 
-function regulate(opacity_percentage) {
-    return Math.max(0, Math.min(100, opacity_percentage));
-}
-
 function reload_filters() {
-    let _filters = settings.get_value('filters');
+    let _filters = settings.get_value(FILTERS);
     filters = [];
 
     for (let i = 0; i < _filters.n_children(); ++i) {
@@ -247,19 +287,19 @@ function _remove_keybinding(key) {
 }
 
 function bind_shortcuts() {
-    _add_keybinding(toggle_key, toggle_glassy_global);
-    _add_keybinding(toggle_window_key, toggle_glassy_window);
-    _add_keybinding(inc_key, increase_window_opacity);
-    _add_keybinding(dec_key, decrease_window_opacity);
-    _add_keybinding(reset_key, reset_window_opacity);
+    _add_keybinding(TOGGLE_KEY, toggle_glassy_global);
+    _add_keybinding(TOGGLE_WINDOW_KEY, toggle_glassy_window);
+    _add_keybinding(INC_KEY, increase_window_opacity);
+    _add_keybinding(DEC_KEY, decrease_window_opacity);
+    _add_keybinding(RESET_KEY, reset_window_opacity);
 }
 
 function unbind_shortcuts() {
-    _remove_keybinding(toggle_key);
-    _remove_keybinding(toggle_window_key);
-    _remove_keybinding(inc_key);
-    _remove_keybinding(dec_key);
-    _remove_keybinding(reset_key);
+    _remove_keybinding(TOGGLE_KEY);
+    _remove_keybinding(TOGGLE_WINDOW_KEY);
+    _remove_keybinding(INC_KEY);
+    _remove_keybinding(DEC_KEY);
+    _remove_keybinding(RESET_KEY);
 }
 
 function init() {
@@ -275,6 +315,7 @@ function update_settings() {
 
     settings = Convenience.getSettings();
 
+    mix_ratio = settings.get_value(MIX_RATIO).get_byte();
     reload_filters();
     reconfigure_windows();
 
@@ -299,7 +340,7 @@ function disconnect_signals() {
 }
 
 function create_label() {
-    var hidden = settings.get_boolean(hide_indicator) || false;
+    var hidden = settings.get_boolean(HIDE_INDICATOR) || false;
     if (!hidden) {
         indicator.init();
         indicator.enable();
@@ -312,7 +353,7 @@ function destroy_label() {
 }
 
 function update_label() {
-    var hidden = settings.get_boolean(hide_indicator) || false;
+    var hidden = settings.get_boolean(HIDE_INDICATOR) || false;
     if (!hidden) {
         create_label();
     } else {
@@ -326,7 +367,7 @@ function asynchronous_glassify() {
 
 function enable() {
     update_settings();
-    activated = settings.get_boolean('auto-start') || true;
+    activated = settings.get_boolean(AUTO_START) || true;
 
     signals = [];
 
@@ -336,13 +377,14 @@ function enable() {
     connect_signal(global.display, 'notify::focus-window', glassify);
 
     // signals for settings
-    connect_signal(settings, 'changed::filters', update_settings);
-    connect_signal(settings, 'changed::' + toggle_key, update_settings);
-    connect_signal(settings, 'changed::' + toggle_window_key, update_settings);
-    connect_signal(settings, 'changed::' + inc_key, update_settings);
-    connect_signal(settings, 'changed::' + dec_key, update_settings);
-    connect_signal(settings, 'changed::' + reset_key, update_settings);
-    connect_signal(settings, 'changed::' + hide_indicator, update_label);
+    connect_signal(settings, 'changed::' + FILTERS, update_settings);
+    connect_signal(settings, 'changed::' + TOGGLE_KEY, update_settings);
+    connect_signal(settings, 'changed::' + TOGGLE_WINDOW_KEY, update_settings);
+    connect_signal(settings, 'changed::' + INC_KEY, update_settings);
+    connect_signal(settings, 'changed::' + DEC_KEY, update_settings);
+    connect_signal(settings, 'changed::' + RESET_KEY, update_settings);
+    connect_signal(settings, 'changed::' + HIDE_INDICATOR, update_label);
+    connect_signal(settings, 'changed::' + MIX_RATIO, update_settings);
 
     create_label();
 

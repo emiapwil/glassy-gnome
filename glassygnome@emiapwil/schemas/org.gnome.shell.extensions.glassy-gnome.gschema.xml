@@ -55,5 +55,10 @@
             <default>false</default>
             <summary>Hide the indicator.</summary>
         </key>
+
+        <key name="mix-ratio" type="y">
+            <default>0</default>
+            <summary>Some special windows may require more opacity, modifying the mix ratio canincrease the opacity for these windows.  The larger the mix ratio is, the more opaque the window will be.</summary>
+        </key>
     </schema>
 </schemalist>
