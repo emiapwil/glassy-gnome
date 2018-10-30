@@ -63,8 +63,16 @@ function glassy_log(text) {
     global.log('[glassy-gnome]: ' + text);
 }
 
+function get_active_workspace_index() {
+    if (global.screen) {
+        return global.screen.get_active_workspace_index();
+    } else {
+        return global.workspace_manager.get_active_workspace_index();
+    }
+}
+
 function is_active_window(win) {
-    let active_workspace_index = global.screen.get_active_workspace_index();
+    let active_workspace_index = get_active_workspace_index();
     let meta_win = win.get_meta_window();
     let workspace_index = meta_win.get_workspace().index();
     return meta_win.has_focus() && (workspace_index == active_workspace_index);
@@ -336,7 +344,7 @@ function disconnect_signals() {
             obj.disconnect(sig);
         }
     });
-    signals = []
+    signals = [];
 }
 
 function create_label() {
@@ -362,7 +370,7 @@ function update_label() {
 }
 
 function asynchronous_glassify() {
-    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 300, glassify, null);
+    GLib.timeout_add(300, glassify, null);
 }
 
 function enable() {
@@ -373,7 +381,11 @@ function enable() {
 
     // signals for window events
     connect_signal(global.display, 'window-created', asynchronous_glassify);
-    connect_signal(global.screen, 'restacked', glassify);
+    if (global.screen) {
+        connect_signal(global.screen, 'restacked', glassify);
+    } else {
+        connect_signal(global.display, 'restacked', glassify);
+    }
     connect_signal(global.display, 'notify::focus-window', glassify);
 
     // signals for settings
