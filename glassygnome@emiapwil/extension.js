@@ -63,16 +63,14 @@ function glassy_log(text) {
     global.log('[glassy-gnome]: ' + text);
 }
 
-function get_active_workspace_index() {
-    if (global.screen) {
-        return global.screen.get_active_workspace_index();
-    } else {
-        return global.workspace_manager.get_active_workspace_index();
-    }
-}
-
 function is_active_window(win) {
-    let active_workspace_index = get_active_workspace_index();
+    if (global.screen) {
+	      // mutter < 3.29
+        let active_workspace_index = global.screen.get_active_workspace_index();
+    } else {
+	      // mutter >= 3.29
+        let active_workspace_index = global.workspace_manager.get_active_workspace_index();
+    }
     let meta_win = win.get_meta_window();
     let workspace_index = meta_win.get_workspace().index();
     return meta_win.has_focus() && (workspace_index == active_workspace_index);
@@ -382,8 +380,10 @@ function enable() {
     // signals for window events
     connect_signal(global.display, 'window-created', asynchronous_glassify);
     if (global.screen) {
+	      // mutter < 3.29
         connect_signal(global.screen, 'restacked', glassify);
     } else {
+	      // mutter >= 3.29
         connect_signal(global.display, 'restacked', glassify);
     }
     connect_signal(global.display, 'notify::focus-window', glassify);
