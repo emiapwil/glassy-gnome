@@ -65,13 +65,12 @@ function glassy_log(text) {
 
 function is_active_window(win) {
     if (global.screen) {
-	// mutter < 3.29
+	      // mutter < 3.29
         let active_workspace_index = global.screen.get_active_workspace_index();
     } else {
-	// mutter >= 3.29
+	      // mutter >= 3.29
         let active_workspace_index = global.workspace_manager.get_active_workspace_index();
     }
-
     let meta_win = win.get_meta_window();
     let workspace_index = meta_win.get_workspace().index();
     return meta_win.has_focus() && (workspace_index == active_workspace_index);
@@ -343,7 +342,7 @@ function disconnect_signals() {
             obj.disconnect(sig);
         }
     });
-    signals = []
+    signals = [];
 }
 
 function create_label() {
@@ -369,7 +368,7 @@ function update_label() {
 }
 
 function asynchronous_glassify() {
-    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 300, glassify, null);
+    GLib.timeout_add(300, glassify, null);
 }
 
 function enable() {
@@ -381,10 +380,10 @@ function enable() {
     // signals for window events
     connect_signal(global.display, 'window-created', asynchronous_glassify);
     if (global.screen) {
-	// mutter < 3.29
+	      // mutter < 3.29
         connect_signal(global.screen, 'restacked', glassify);
     } else {
-	// mutter >= 3.29
+	      // mutter >= 3.29
         connect_signal(global.display, 'restacked', glassify);
     }
     connect_signal(global.display, 'notify::focus-window', glassify);
