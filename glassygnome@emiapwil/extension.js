@@ -368,7 +368,7 @@ function update_label() {
 }
 
 function asynchronous_glassify() {
-    GLib.timeout_add(300, glassify, null);
+    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 300, glassify);
 }
 
 function enable() {

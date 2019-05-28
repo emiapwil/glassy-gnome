@@ -1,7 +1,8 @@
 SCHEMA_DIR=glassygnome@emiapwil/schemas/
 EXTENSION_DIR=~/.local/share/gnome-shell/extensions/
+SHELL:=/bin/bash
 
-package: deploy
+package: lint deploy
 	pushd glassygnome@emiapwil && zip glassygnome@emiapwil.zip -r ./* --exclude \*.swp && popd
 
 schema: $(SCHEMA_DIR)/org.gnome.shell.extensions.glassy-gnome.gschema.xml
@@ -19,3 +20,6 @@ install: package
 	cp -r ./glassygnome@emiapwil ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil
 	gnome-shell-extension-tool -e glassygnome@emiapwil
 
+@PHONY: lint
+lint:
+	npx eslint -c ./.eslintrc.js ./glassygnome@emiapwil/*.js
