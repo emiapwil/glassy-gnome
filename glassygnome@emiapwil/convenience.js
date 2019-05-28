@@ -25,11 +25,11 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-const Gettext = imports.gettext;
-const Gio = imports.gi.Gio;
+var Gettext = imports.gettext;
+var Gio = imports.gi.Gio;
 
-const Config = imports.misc.config;
-const ExtensionUtils = imports.misc.extensionUtils;
+var Config = imports.misc.config;
+var ExtensionUtils = imports.misc.extensionUtils;
 
 /**
  * initTranslations:
@@ -90,4 +90,3 @@ function getSettings(schema) {
 
     return new Gio.Settings({ settings_schema: schemaObj });
 }
-								  

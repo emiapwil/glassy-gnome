@@ -27,7 +27,7 @@ function Indicator() {
 
         label = new St.Label({
             text: 'G',
-            style_class: "glasygnome-indicator",
+            style_class: 'glasygnome-indicator',
             y_align: Clutter.ActorAlign.CENTER
         });
 
