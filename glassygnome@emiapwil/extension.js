@@ -1,48 +1,48 @@
 
-const Main              = imports.ui.main;
-const Shell             = imports.gi.Shell;
-const ExtensionUtils    = imports.misc.extensionUtils;
-const Glassy            = ExtensionUtils.getCurrentExtension();
-const Convenience       = Glassy.imports.convenience;
-const Indicator         = Glassy.imports.indicator;
+var Main = imports.ui.main;
+var Shell = imports.gi.Shell;
+var ExtensionUtils = imports.misc.extensionUtils;
+var Glassy = ExtensionUtils.getCurrentExtension();
+var Convenience = Glassy.imports.convenience;
+var Indicator = Glassy.imports.indicator;
 //TODO const Preference     = Glassy.imports.preference;
-const GLib              = imports.gi.GLib;
-const Meta              = imports.gi.Meta;
+var GLib = imports.gi.GLib;
+var Meta = imports.gi.Meta;
 
-const OPAQUE            = 255;
-const TRANSPARENT       = 0;
+var OPAQUE = 255;
+var TRANSPARENT = 0;
 
 // setting key names
-const AUTO_START        = 'auto-start';
-const FILTERS           = 'filters';
-const TOGGLE_KEY        = 'toggle-glassy-global-key';
-const TOGGLE_WINDOW_KEY = 'toggle-glassy-window-key';
-const INC_KEY           = 'inc-opacity-key';
-const DEC_KEY           = 'dec-opacity-key';
-const RESET_KEY         = 'reset-opacity-key';
-const HIDE_INDICATOR    = 'hide-indicator';
-const MIX_RATIO         = 'mix-ratio';
+var AUTO_START = 'auto-start';
+var FILTERS = 'filters';
+var TOGGLE_KEY = 'toggle-glassy-global-key';
+var TOGGLE_WINDOW_KEY = 'toggle-glassy-window-key';
+var INC_KEY = 'inc-opacity-key';
+var DEC_KEY = 'dec-opacity-key';
+var RESET_KEY = 'reset-opacity-key';
+var HIDE_INDICATOR = 'hide-indicator';
+var MIX_RATIO = 'mix-ratio';
 
-const window_type_map   = {
-    0   :   'NORMAL',           // Meta.WindowType.NORMAL
-    1   :   'DESKTOP',          // Meta.WindowType.DESKTOP
-    2   :   'DOCK',             // Meta.WindowType.DOCK
-    3   :   'DIALOG',           // Meta.WindowType.DIALOG
-    4   :   'MODAL_DIALOG',     // Meta.WindowType.MODAL_DIALOG
-    5   :   'TOOLBAR',          // Meta.WindowType.TOOLBAR
-    6   :   'MENU',             // Meta.WindowType.MENU
-    7   :   'UTILITY',          // Meta.WindowType.UTILITY
-    8   :   'SPLASHSCREEN',     // Meta.WindowType.SPLASHSCREEN
-    9   :   'DROPDOWN_MENU',    // Meta.WindowType.DROPDOWN_MENU
-    10  :   'POPUP_MENU',       // Meta.WindowType.POPUP_MENU
-    11  :   'TOOLTIP',          // Meta.WindowType.TOOLTIP
-    12  :   'NOTIFICATION',     // Meta.WindowType.NOTIFICATION
-    13  :   'COMBO',            // Meta.WindowType.COMBO
-    14  :   'DND',              // Meta.WindowType.DND
-    15  :   'OVERRIDE_OTHER'    // Meta.WindowType.OVERRIDE_OTHER
+var window_type_map = {
+    0: 'NORMAL',           // Meta.WindowType.NORMAL
+    1: 'DESKTOP',          // Meta.WindowType.DESKTOP
+    2: 'DOCK',             // Meta.WindowType.DOCK
+    3: 'DIALOG',           // Meta.WindowType.DIALOG
+    4: 'MODAL_DIALOG',     // Meta.WindowType.MODAL_DIALOG
+    5: 'TOOLBAR',          // Meta.WindowType.TOOLBAR
+    6: 'MENU',             // Meta.WindowType.MENU
+    7: 'UTILITY',          // Meta.WindowType.UTILITY
+    8: 'SPLASHSCREEN',     // Meta.WindowType.SPLASHSCREEN
+    9: 'DROPDOWN_MENU',    // Meta.WindowType.DROPDOWN_MENU
+    10: 'POPUP_MENU',       // Meta.WindowType.POPUP_MENU
+    11: 'TOOLTIP',          // Meta.WindowType.TOOLTIP
+    12: 'NOTIFICATION',     // Meta.WindowType.NOTIFICATION
+    13: 'COMBO',            // Meta.WindowType.COMBO
+    14: 'DND',              // Meta.WindowType.DND
+    15: 'OVERRIDE_OTHER'    // Meta.WindowType.OVERRIDE_OTHER
 };
 
-const window_type_to_be_mixed = [
+var window_type_to_be_mixed = [
     Meta.WindowType.SPLASHSCREEN,
     Meta.WindowType.DROPDOWN_MENU,
     Meta.WindowType.POPUP_MENU,
@@ -56,7 +56,7 @@ var signals;
 
 var indicator = Indicator.Indicator();
 
-const MAX_MIX_RATIO = 256;
+var MAX_MIX_RATIO = 256;
 var mix_ratio;
 
 function glassy_log(text) {
@@ -64,20 +64,19 @@ function glassy_log(text) {
 }
 
 function is_active_window(win) {
-    if (global.screen) {
-	      // mutter < 3.29
-        let active_workspace_index = global.screen.get_active_workspace_index();
-    } else {
-	      // mutter >= 3.29
-        let active_workspace_index = global.workspace_manager.get_active_workspace_index();
-    }
-    let meta_win = win.get_meta_window();
-    let workspace_index = meta_win.get_workspace().index();
+    const active_workspace_index = global.screen ?
+        // mutter < 3.29
+        global.screen.get_active_workspace_index():
+        // mutter >= 3.29
+        global.workspace_manager.get_active_workspace_index();
+
+    const meta_win = win.get_meta_window();
+    const workspace_index = meta_win.get_workspace().index();
     return meta_win.has_focus() && (workspace_index == active_workspace_index);
 }
 
 function get_active_window() {
-    let active_windows = global.get_window_actors().filter(function(win) {
+    let active_windows = global.get_window_actors().filter(function (win) {
         return is_active_window(win);
     });
     return (active_windows.length > 0 ? active_windows[0] : null);
@@ -99,12 +98,12 @@ function find_filter(window_class) {
 function configure_glassy_window(meta_win) {
     if (meta_win.glassy == null) {
         meta_win.glassy = {
-            enabled:    true,
-            filter:     null,
-            offset:     0
+            enabled: true,
+            filter: null,
+            offset: 0
         };
     }
-    let window_class = meta_win.get_wm_class() || "";
+    let window_class = meta_win.get_wm_class() || '';
 
     meta_win.glassy.filter = find_filter(window_class);
 }
@@ -141,7 +140,7 @@ function regulate(opacity_percentage, win_type) {
 }
 
 function glassify() {
-    global.get_window_actors().forEach(function(win) {
+    global.get_window_actors().forEach(function (win) {
         if (!activated) {
             update_opacity(win, OPAQUE);
             return;
@@ -163,7 +162,7 @@ function glassify() {
 
         let filter = glassy.filter;
         let opacity_percentage = (is_active ? filter.active_opacity
-                                            : filter.inactive_opacity);
+            : filter.inactive_opacity);
         opacity_percentage += glassy.offset;
         opacity_percentage = regulate(opacity_percentage, win_type);
 
@@ -185,10 +184,10 @@ function reload_filters() {
         let _step = _filter.get_child_value(3).get_byte();
 
         let filter = {
-            patterns:           _patterns,
-            active_opacity:     regulate(_active_opacity),
-            inactive_opacity:   regulate(_inactive_opacity),
-            step:               regulate(_step)
+            patterns: _patterns,
+            active_opacity: regulate(_active_opacity),
+            inactive_opacity: regulate(_inactive_opacity),
+            step: regulate(_step)
         };
         filters.push(filter);
     }
@@ -277,11 +276,11 @@ function reset_window_opacity() {
 function _add_keybinding(key, func) {
     if (Main.wm.addKeybinding) {
         Main.wm.addKeybinding(key, settings, Meta.KeyBindingFlags.NONE,
-                              Shell.ActionMode.ALL, func);
+            Shell.ActionMode.ALL, func);
     } else {
         global.display.add_keybinding(key, settings, Meta.KeyBindingFlags.NONE, func);
     }
-    glassy_log("Successfully add key binding for " + key);
+    glassy_log('Successfully add key binding for ' + key);
 }
 
 function _remove_keybinding(key) {
@@ -311,7 +310,7 @@ function unbind_shortcuts() {
 function init() {
     settings = null;
 
-    glassy_log("initialized");
+    glassy_log('initialized');
 }
 
 function update_settings() {
@@ -368,7 +367,7 @@ function update_label() {
 }
 
 function asynchronous_glassify() {
-    GLib.timeout_add(300, glassify, null);
+    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 300, glassify);
 }
 
 function enable() {
@@ -380,10 +379,10 @@ function enable() {
     // signals for window events
     connect_signal(global.display, 'window-created', asynchronous_glassify);
     if (global.screen) {
-	      // mutter < 3.29
+        // mutter < 3.29
         connect_signal(global.screen, 'restacked', glassify);
     } else {
-	      // mutter >= 3.29
+        // mutter >= 3.29
         connect_signal(global.display, 'restacked', glassify);
     }
     connect_signal(global.display, 'notify::focus-window', glassify);
@@ -402,7 +401,7 @@ function enable() {
 
     glassify();
 
-    glassy_log("enabled");
+    glassy_log('enabled');
 }
 
 function disable() {
@@ -413,5 +412,5 @@ function disable() {
 
     glassify();
 
-    glassy_log("disabled");
+    glassy_log('disabled');
 }
