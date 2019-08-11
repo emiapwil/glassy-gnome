@@ -175,6 +175,10 @@ See [Issue 6][issue-6].
 
 [issue-6]: https://github.com/emiapwil/glassy-gnome/issues/6
 
+### Hot keys clash
+
+The default hot keys for this extension is overriden by the 'dock-to-dash' extension. To still use the default key bindings, follow the instructions in [this link](http://ubuntuhandbook.org/index.php/2019/05/disable-super-num-function-keys-in-ubuntu-18-04-19-04/).
+
 # Features in the Future
 
 - A GUI for settings
