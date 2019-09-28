@@ -15,10 +15,10 @@ clean:
 	@rm -f glassygnome@emiapwil/glassygnome@emiapwil.zip
 
 install: package
-	gnome-shell-extension-tool -d glassygnome@emiapwil
-	rm -rf ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil
-	cp -r ./glassygnome@emiapwil ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil
-	gnome-shell-extension-tool -e glassygnome@emiapwil
+	gnome-extensions disable glassygnome@emiapwil
+	rm -rf $(EXTENSION_DIR)/glassygnome@emiapwil
+	cp -r ./glassygnome@emiapwil $(EXTENSION_DIR)/glassygnome@emiapwil
+	gnome-extensions enable glassygnome@emiapwil
 
 @PHONY: lint
 lint:

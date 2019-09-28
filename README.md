@@ -56,29 +56,31 @@ If a given value is larger than 100, it will be treated as 100.
 
 ## Shortcuts to manipulate the opacity of the active window
 
-Currently I use `<Super>0`/`<Super>9`/`<Super>8` to increase/decrease/reset the
-opacity of the active window.
+Currently `<Super>,`/`<Super>.`/`<Super>'` are used to increase/decrease/reset the
+opacity of the active window, and `<Super>\`` is used to toggle the opacity of
+the current window.
 
-There are five shortcuts available for glassy-gnome.  Except the three mentioned
-above, you can also toggle both the global and per-window glassy effect.  The
-key bindings for these two shortcuts, however, are not set when you first
-install the extension.  You can use the following command to set up the
-shortcuts:
+There are five shortcuts available for glassy-gnome.  Except the four mentioned
+above, you can also toggle both the global glassy effect.  The key binding for
+this functionality, however, is not set when you first install the extension.
+You can use the following command to set up the shortcuts:
 
 ~~~{.bash}
 gsettings --schemadir ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil/schemas \
-          set org.gnome.shell.extensions.glassy-gnome toggle-glassy-global-key "['<Super>6']"
+          set org.gnome.shell.extensions.glassy-gnome toggle-glassy-global-key "['<Super>t']"
 
 gsettings --schemadir ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil/schemas \
-          set org.gnome.shell.extensions.glassy-gnome toggle-glassy-window-key "['<Super>7']"
+          set org.gnome.shell.extensions.glassy-gnome toggle-glassy-window-key "['<Super>grave']"
+
+gsettings --schemadir ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil/schemas \
+          set org.gnome.shell.extensions.glassy-gnome dec-opacity-key "['<Super>comma']"
+
+gsettings --schemadir ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil/schemas \
+          set org.gnome.shell.extensions.glassy-gnome inc-opacity-key "['<Super>period']"
+
+gsettings --schemadir ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil/schemas \
+          set org.gnome.shell.extensions.glassy-gnome reset-opacity-key "['<Super>apostrophe']"
 ~~~
-
-You can also replace `toggle-glassy-global-key` to
-`inc-opacity-key`/`dec-opacity-key`/`reset-opacity-key` to set up your own key
-bindings for increasing/decreasing/resetting the opacity for the active window.
-
-It is worth pointing out that the changes will not be recorded after the window
-is closed.  I might consider adding this as a future feature.
 
 ## Auto start
 
@@ -177,7 +179,7 @@ See [Issue 6][issue-6].
 
 ### Hot keys clash
 
-The default hot keys for this extension is overriden by the 'dock-to-dash' extension. To still use the default key bindings, follow the instructions in [this link](http://ubuntuhandbook.org/index.php/2019/05/disable-super-num-function-keys-in-ubuntu-18-04-19-04/).
+The old hot keys for this extension is overriden by the 'dock-to-dash' extension. To still use the default key bindings, follow the instructions in [this link](http://ubuntuhandbook.org/index.php/2019/05/disable-super-num-function-keys-in-ubuntu-18-04-19-04/).
 
 # Features in the Future
 
