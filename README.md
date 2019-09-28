@@ -2,7 +2,7 @@
 
 A gnome-shell extension to enable window transparency.
 
-# Usage
+# Installation
 
 ## Copy the extension to the extension folder manually
 
@@ -22,6 +22,17 @@ The extension will be compiled and put to folder
 The extension has been uploaded to
 [extensions.gnome.org](https://extensions.gnome.org/extension/982/glassy-gnome/).
 You can download the extension there.
+
+# Usage
+
+It takes two steps to use glassy GNOME after installation:
+
+- Configure your transparency rules (i.e., window filters) before use
+- Configure the window transparency using hot keys
+  - Increase opacity of the current window: `<Super> + .`
+  - Decrease opacity of the current window: `<Super> + ,`
+  - Reset opacity of the current window: `<Super> + '`
+  - Toggle the glassy effect of the current window: ``<Super> + ` ``
 
 ## Window Filters
 
