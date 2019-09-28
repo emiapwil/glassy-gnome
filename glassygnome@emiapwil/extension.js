@@ -63,6 +63,8 @@ function glassy_log(text) {
     global.log('[glassy-gnome]: ' + text);
 }
 
+var active_workspace_index;
+
 function is_active_window(win) {
     const active_workspace_index = global.screen ?
         // mutter < 3.29
@@ -275,8 +277,9 @@ function reset_window_opacity() {
 
 function _add_keybinding(key, func) {
     if (Main.wm.addKeybinding) {
-        Main.wm.addKeybinding(key, settings, Meta.KeyBindingFlags.NONE,
-            Shell.ActionMode.ALL, func);
+        Main.wm.addKeybinding(key, settings,
+                              Meta.KeyBindingFlags.PER_WINDOW,
+                              Shell.ActionMode.ALL, func);
     } else {
         global.display.add_keybinding(key, settings, Meta.KeyBindingFlags.NONE, func);
     }

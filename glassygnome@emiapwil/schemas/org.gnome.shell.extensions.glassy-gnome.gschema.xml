@@ -27,22 +27,22 @@
         </key>
 
         <key name="toggle-glassy-window-key" type="as">
-            <default><![CDATA[['<Super>7']]]></default>
+            <default><![CDATA[['<Super>grave']]]></default>
             <summary>Shortcut to toggle glass-gnome for the active window.</summary>
         </key>
 
         <key name="inc-opacity-key" type="as">
-            <default><![CDATA[['<Super>0']]]></default>
+            <default><![CDATA[['<Super>period']]]></default>
             <summary>Shortcut to increase the active opacity for the active window.</summary>
         </key>
 
         <key name="dec-opacity-key" type="as">
-            <default><![CDATA[['<Super>9']]]></default>
+            <default><![CDATA[['<Super>comma']]]></default>
             <summary>Shortcut to decrease the active opacity for the active window.</summary>
         </key>
 
         <key name="reset-opacity-key" type="as">
-            <default><![CDATA[['<Super>8']]]></default>
+            <default><![CDATA[['<Super>apostrophe']]]></default>
             <summary>Shortcut to reset the opacity of the active window to default (the values in the filters).</summary>
         </key>
 
