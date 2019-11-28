@@ -14,6 +14,7 @@ var TRANSPARENT = 0;
 
 // setting key names
 var AUTO_START = 'auto-start';
+var OPAQUE_FULLSCREEN = 'opaque-fullscreen';
 var FILTERS = 'filters';
 var TOGGLE_KEY = 'toggle-glassy-global-key';
 var TOGGLE_WINDOW_KEY = 'toggle-glassy-window-key';
@@ -50,7 +51,7 @@ var window_type_to_be_mixed = [
     Meta.WindowType.OVERRIDE_OTHER
 ];
 
-var settings, filters, activated;
+var settings, filters, activated, opaque_fullscreen;
 
 var signals;
 
@@ -74,6 +75,7 @@ function is_active_window(win) {
 
     const meta_win = win.get_meta_window();
     const workspace_index = meta_win.get_workspace().index();
+    global.log("fullscreen?" + meta_win.get_wm_class() + ": " + meta_win.is_fullscreen());
     return meta_win.has_focus() && (workspace_index == active_workspace_index);
 }
 
@@ -123,7 +125,9 @@ function reconfigure_windows() {
 }
 
 function update_opacity(win, opacity) {
-    win.set_opacity(opacity);
+    if ((win.opacity == null) || (win.opacity != opacity)) {
+        win.set_opacity(opacity);
+    }
 
     if (!is_active_window(win)) {
         return;
@@ -158,6 +162,11 @@ function glassify() {
         let win_type = meta_win.get_window_type() || Meta.WindowType.NORMAL;
 
         if ((glassy.filter == null) || (!glassy.enabled)) {
+            update_opacity(win, OPAQUE);
+            return;
+        }
+
+        if ((opaque_fullscreen) && (meta_win.is_fullscreen())) {
             update_opacity(win, OPAQUE);
             return;
         }
@@ -323,6 +332,7 @@ function update_settings() {
 
     settings = Convenience.getSettings();
 
+    opaque_fullscreen = settings.get_boolean(OPAQUE_FULLSCREEN);
     mix_ratio = settings.get_value(MIX_RATIO).get_byte();
     reload_filters();
     reconfigure_windows();
@@ -391,6 +401,7 @@ function enable() {
     connect_signal(global.display, 'notify::focus-window', glassify);
 
     // signals for settings
+    connect_signal(settings, 'changed::' + OPAQUE_FULLSCREEN, update_settings);
     connect_signal(settings, 'changed::' + FILTERS, update_settings);
     connect_signal(settings, 'changed::' + TOGGLE_KEY, update_settings);
     connect_signal(settings, 'changed::' + TOGGLE_WINDOW_KEY, update_settings);

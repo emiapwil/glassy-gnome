@@ -27,7 +27,7 @@ function Indicator() {
 
         label = new St.Label({
             text: 'G',
-            style_class: 'glasygnome-indicator',
+            style_class: 'glassygnome-indicator',
             y_align: Clutter.ActorAlign.CENTER
         });
 
@@ -59,6 +59,6 @@ function Indicator() {
         destroy:        destroy,
         enable:         enable,
         disable:        disable,
-        set_opacity:    set_opacity,
+        set_opacity:    set_opacity
     };
 }

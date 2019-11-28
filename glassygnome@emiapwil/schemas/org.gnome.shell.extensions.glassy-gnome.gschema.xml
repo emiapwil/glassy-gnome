@@ -51,6 +51,11 @@
             <summary>Start Glassy GNOME when the system starts up.</summary>
         </key>
 
+        <key name="opaque-fullscreen" type="b">
+            <default>true</default>
+            <summary>Make fullscreen windows opaque.</summary>
+        </key>
+
         <key name="hide-indicator" type="b">
             <default>false</default>
             <summary>Hide the indicator.</summary>
