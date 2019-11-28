@@ -50,10 +50,10 @@ for *Firefox*:
 gsettings --schemadir ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil/schemas \
           set org.gnome.shell.extensions.glassy-gnome filters \
 	      "[
-              (['Terminal'], byte 0x50, byte 0x32, byte 0x0a),
-	          (['Firefox'], byte 0x5f, byte 0x50, byte 0x0a),
+                  (['Gnome-terminal'], byte 0x50, byte 0x32, byte 0x0a),
+	          (['firefox'], byte 0x5f, byte 0x50, byte 0x0a),
 	          (['.*'], byte 0x5f, byte 0x50, byte 0x05)
-          ]"
+              ]"
 ~~~
 
 If you are not certain what the regex should look like, it is possible to use
@@ -64,6 +64,12 @@ The valid range of `active_opacity`/`inactive_opacity`/`step` are 0~100 (0x00~0x
 If a given value is larger than 100, it will be treated as 100.
 
 [looking-glass]: https://wiki.gnome.org/Projects/GnomeShell/LookingGlass
+
+**Important Note**: How to get the correct pattern using looking glass?
+
+- Type `lg` in the command prompt dialogue (`alt+F2`)
+- Type `global.get_window_actors().forEach(function (w) { global.log(w.get_meta_window().get_wm_class()); })`
+- Open a terminal and type `journalctl -n 50` to extract the patterns to be used (which only applies to existing windows)
 
 ## Shortcuts to manipulate the opacity of the active window
 
