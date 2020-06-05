@@ -58,12 +58,10 @@ gsettings --schemadir ~/.local/share/gnome-shell/extensions/glassygnome@emiapwil
 
 If you are not certain what the regex should look like, it is possible to use
 `xwininfo` to see all names of the windows.  Or you can use the [*looking glass
-tool*](looking-glass), which is quite useful.
+tool*](https://wiki.gnome.org/Projects/GnomeShell/LookingGlass), which is quite useful.
 
 The valid range of `active_opacity`/`inactive_opacity`/`step` are 0~100 (0x00~0x64).
 If a given value is larger than 100, it will be treated as 100.
-
-[looking-glass]: https://wiki.gnome.org/Projects/GnomeShell/LookingGlass
 
 **Important Note**: How to get the correct pattern using looking glass?
 
