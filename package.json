@@ -14,7 +14,7 @@
   "license": "GPL",
   "devDependencies": {
     "eslint": "^4.19.1",
-    "eslint-plugin-gjs": "git@github.com:rockon999/eslint-plugin-gjs.git#master"
+    "eslint-plugin-gjs": "github:rockon999/eslint-plugin-gjs#master"
   },
   "dependencies": {
     "eslint-ast-utils": "^1.1.0"

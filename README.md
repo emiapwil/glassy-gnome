@@ -11,6 +11,8 @@ Put `glassygnome@emiapwil` to the extension folder (Mine is
 
 ## Build from source
 
+Set up ESLint: follow the instructions [here](https://github.com/ewlsh/eslint-plugin-gjs).
+
 Clone this repository and run `make`.
 
 The extension will be compiled and put to folder

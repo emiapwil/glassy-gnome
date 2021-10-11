@@ -75,7 +75,7 @@ function is_active_window(win) {
 
     const meta_win = win.get_meta_window();
     const workspace_index = meta_win.get_workspace().index();
-    global.log("fullscreen?" + meta_win.get_wm_class() + ": " + meta_win.is_fullscreen());
+    global.log('fullscreen?' + meta_win.get_wm_class() + ': ' + meta_win.is_fullscreen());
     return meta_win.has_focus() && (workspace_index == active_workspace_index);
 }
 
