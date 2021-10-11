@@ -4,22 +4,15 @@ SHELL:=/bin/bash
 
 publish: lint package
 
-package: schema clean
-	pushd glassygnome@emiapwil && zip glassygnome@emiapwil.zip -r ./* --exclude \*.swp && popd
+package: schema
+	zip glassygnome@emiapwil.zip -r glassygnome@emiapwil/* --exclude \*.swp 
 
 schema: $(SCHEMA_DIR)/org.gnome.shell.extensions.glassy-gnome.gschema.xml
 	glib-compile-schemas $(SCHEMA_DIR)
 
-deploy: schema clean
-	rsync -avz glassygnome@emiapwil --exclude '*.swp' $(EXTENSION_DIR)
-
-clean:
-	@rm -f glassygnome@emiapwil/glassygnome@emiapwil.zip
-
 install: package
-	gnome-extensions disable glassygnome@emiapwil
-	rm -rf $(EXTENSION_DIR)/glassygnome@emiapwil
-	cp -r ./glassygnome@emiapwil $(EXTENSION_DIR)/glassygnome@emiapwil
+	- gnome-extensions disable -q glassygnome@emiapwi
+	gnome-extensions install --force glassygnome@emiapwil.zip
 	gnome-extensions enable glassygnome@emiapwil
 
 @PHONY: lint
