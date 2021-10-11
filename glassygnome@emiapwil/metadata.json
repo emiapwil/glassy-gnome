@@ -1,9 +1,10 @@
 {
-    "shell-version": ["41", "40", "3.38", "3.36", "3.34", "3.32", "3.30", "3.29", "3.28", "3.26", "3.24", "3.22", "3.20", "3.18", "3.16"],
-    "uuid": "glassygnome@emiapwil",
-    "name": "Glassy GNOME",
-    "original-authors": [ "emiapwil@gmail.com" ],
-    "description": "A tool to change the transparency of windows in GNOME 3. If you encounter any problem, please report a bug or submit an issue on Github.",
-    "settings-schema": "org.gnome.shell.extensions.glassy-gnome",
-    "url": "https://github.com/emiapwil/glassy-gnome"
+  "version": 18,
+  "shell-version": ["41", "40", "3.38", "3.36", "3.34", "3.32", "3.30", "3.29", "3.28", "3.26", "3.24", "3.22", "3.20", "3.18", "3.16"],
+  "uuid": "glassygnome@emiapwil",
+  "name": "Glassy GNOME",
+  "original-authors": [ "emiapwil@gmail.com" ],
+  "description": "A tool to change the transparency of windows in GNOME 3. If you encounter any problem, please report a bug or submit an issue on Github.",
+  "settings-schema": "org.gnome.shell.extensions.glassy-gnome",
+  "url": "https://github.com/emiapwil/glassy-gnome"
 }

@@ -5,7 +5,7 @@ SHELL:=/bin/bash
 publish: lint package
 
 package: schema
-	zip glassygnome@emiapwil.zip -r glassygnome@emiapwil/* --exclude \*.swp 
+	pushd glassygnome@emiapwil && zip ../glassygnome@emiapwil.zip -r ./* --exclude \*.swp  && popd
 
 schema: $(SCHEMA_DIR)/org.gnome.shell.extensions.glassy-gnome.gschema.xml
 	glib-compile-schemas $(SCHEMA_DIR)
